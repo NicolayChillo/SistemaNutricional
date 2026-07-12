@@ -1,0 +1,49 @@
+name: nutricional
+description: "Plataforma Nutricional con Menú Semanal + QR"
+publish_to: 'none'
+version: 1.3.5+10
+
+environment:
+  sdk: ^3.9.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cloud_firestore: ^6.1.1
+  firebase_core: ^4.3.0
+  firebase_auth: ^6.1.3
+  google_sign_in: ^6.1.5
+  flutter_facebook_auth: ^6.0.0
+  cloudinary_flutter: ^1.3.0
+  cloudinary_public: ^0.23.1
+  provider: ^6.1.5+1
+  image_picker: ^1.2.1
+  http: ^1.1.0
+  sqflite: ^2.3.0
+  path: ^1.9.0
+  connectivity_plus: ^5.0.2
+  flutter_secure_storage: ^10.3.1
+  flutter_local_notifications: ^16.3.2
+  timezone: ^0.9.4
+  intl: ^0.20.3
+  mobile_scanner: ^7.2.0
+  uuid: ^4.5.1
+  firebase_messaging: ^16.1.1
+  cached_network_image: ^3.3.1
+  pdf: ^3.11.1
+  printing: ^5.13.2
+  path_provider: ^2.1.4
+  url_launcher: ^6.3.1
+  crypto: ^3.0.3
+  introduction_screen: ^4.0.0
+  shared_preferences: ^2.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/image/
