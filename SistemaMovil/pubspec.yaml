@@ -111,4 +111,3 @@ flutter:
   uses-material-design: true
   assets:
     - assets/image/
-    - assets/test_data/
