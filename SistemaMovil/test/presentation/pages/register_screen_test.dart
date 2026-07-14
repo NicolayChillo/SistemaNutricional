@@ -2,7 +2,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
-import '../../../lib/presentation/pages/login_screen.dart';
+import '../../../lib/presentation/pages/register_screen.dart';
 import '../../../lib/presentation/providers/auth_provider.dart';
 
 class TestAuthProvider extends AuthProvider {
@@ -22,57 +22,58 @@ void main() {
       create: (_) => TestAuthProvider(),
       child: MaterialApp(
         routes: {
-          '/register': (_) => const Scaffold(
-                body: Text('Pantalla Registro'),
+          '/login': (_) => const Scaffold(
+                body: Text('Pantalla Login'),
               ),
           '/home': (_) => const Scaffold(
                 body: Text('Pantalla Home'),
               ),
         },
-        home: const LoginScreen(),
+        home: const RegisterScreen(),
       ),
     );
   }
 
-  group('LoginScreen Presentation Tests', () {
+  group('RegisterScreen Presentation Tests', () {
     testWidgets(
-      'Debe mostrar el título Iniciar Sesión',
+      'Debe mostrar el título Crear Cuenta',
       (WidgetTester tester) async {
         await tester.pumpWidget(createTestWidget());
         await tester.pump();
 
-        expect(find.text('Iniciar Sesión'), findsOneWidget);
+        expect(find.text('Crear Cuenta'), findsOneWidget);
       },
     );
 
     testWidgets(
-      'Debe mostrar el mensaje de bienvenida',
+      'Debe mostrar el título Regístrate',
       (WidgetTester tester) async {
         await tester.pumpWidget(createTestWidget());
         await tester.pump();
 
-        expect(find.text('Bienvenido'), findsOneWidget);
+        expect(find.text('Regístrate'), findsOneWidget);
       },
     );
 
     testWidgets(
-      'Debe mostrar los campos de email y contraseña',
+      'Debe mostrar los tres campos del formulario',
       (WidgetTester tester) async {
         await tester.pumpWidget(createTestWidget());
         await tester.pump();
 
+        expect(find.text('Nombre'), findsOneWidget);
         expect(find.text('Email'), findsOneWidget);
         expect(find.text('Contraseña'), findsOneWidget);
       },
     );
 
     testWidgets(
-      'Debe mostrar el botón de iniciar sesión',
+      'Debe mostrar el botón Registrarse',
       (WidgetTester tester) async {
         await tester.pumpWidget(createTestWidget());
         await tester.pump();
 
-        expect(find.text('Iniciar Sesión'), findsWidgets);
+        expect(find.text('Registrarse'), findsOneWidget);
       },
     );
 
@@ -88,44 +89,41 @@ void main() {
     );
 
     testWidgets(
-      'Debe mostrar enlace para registrarse',
+      'Debe mostrar enlace para iniciar sesión',
       (WidgetTester tester) async {
         await tester.pumpWidget(createTestWidget());
         await tester.pump();
 
         expect(
-          find.text('¿No tienes una cuenta? Regístrate'),
+          find.text('¿Ya tienes una cuenta? Inicia sesión'),
           findsOneWidget,
         );
       },
     );
 
     testWidgets(
-      'Debe mostrar términos y condiciones',
+      'Debe mostrar errores de validación con formulario vacío',
       (WidgetTester tester) async {
         await tester.pumpWidget(createTestWidget());
+        await tester.pump();
+
+        await tester.tap(find.text('Registrarse'));
         await tester.pump();
 
         expect(
-          find.text('Términos y Condiciones'),
+          find.text('Por favor ingrese su nombre'),
           findsOneWidget,
         );
-      },
-    );
 
-    testWidgets(
-      'Debe navegar a registro al presionar el enlace',
-      (WidgetTester tester) async {
-        await tester.pumpWidget(createTestWidget());
-        await tester.pump();
-
-        await tester.tap(
-          find.text('¿No tienes una cuenta? Regístrate'),
+        expect(
+          find.text('Por favor ingrese su email'),
+          findsOneWidget,
         );
 
-        await tester.pumpAndSettle();
-
-        expect(find.text('Pantalla Registro'), findsOneWidget);
+        expect(
+          find.text('Por favor ingrese su contraseña'),
+          findsOneWidget,
+        );
       },
     );
   });
