@@ -1,4 +1,4 @@
-// auth_firebase_datasource.dart - Versión mejorada
+// auth_firebase_datasource.dart - Versión con Inyección de Dependencias
 
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:google_sign_in/google_sign_in.dart';
@@ -6,12 +6,20 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import '../../domain/entities/user.dart' as entities;
 
 class AuthFirebaseDatasource {
-  final auth.FirebaseAuth _firebaseAuth = auth.FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: ['email', 'profile'],
-  );
+  final auth.FirebaseAuth _firebaseAuth;
+  final GoogleSignIn _googleSignIn;
+  final FacebookAuth _facebookAuth;
 
-  // Login con email y contraseña - CON MENSAJES DE ERROR ESPECÍFICOS
+  // MODIFICACIÓN: Inyección de dependencias para permitir el testing (Mocks/Fakes)
+  AuthFirebaseDatasource({
+    auth.FirebaseAuth? firebaseAuth,
+    GoogleSignIn? googleSignIn,
+    FacebookAuth? facebookAuth,
+  })  : _firebaseAuth = firebaseAuth ?? auth.FirebaseAuth.instance,
+        _googleSignIn = googleSignIn ?? GoogleSignIn(scopes: ['email', 'profile']),
+        _facebookAuth = facebookAuth ?? FacebookAuth.instance;
+
+  // Login con email y contraseña
   Future<entities.User> loginWithEmail(String email, String password) async {
     try {
       final userCredential = await _firebaseAuth.signInWithEmailAndPassword(
@@ -28,7 +36,6 @@ class AuthFirebaseDatasource {
         email: user.email ?? '',
       );
     } on auth.FirebaseAuthException catch (e) {
-      // Mapeo de errores específicos de Firebase
       switch (e.code) {
         case 'user-not-found':
           throw Exception('No existe una cuenta con este correo electrónico');
@@ -50,7 +57,7 @@ class AuthFirebaseDatasource {
     }
   }
 
-  // Registro con email y contraseña - CON MENSAJES DE ERROR ESPECÍFICOS
+  // Registro con email y contraseña
   Future<entities.User> registerWithEmail(String email, String password, String displayName) async {
     try {
       final userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
@@ -61,7 +68,6 @@ class AuthFirebaseDatasource {
       final user = userCredential.user;
       if (user == null) throw Exception('Error al crear usuario');
 
-      // Actualizar el nombre de usuario
       await user.updateDisplayName(displayName);
 
       return entities.User(
@@ -70,7 +76,6 @@ class AuthFirebaseDatasource {
         email: user.email ?? '',
       );
     } on auth.FirebaseAuthException catch (e) {
-      // Mapeo de errores específicos de Firebase para registro
       switch (e.code) {
         case 'email-already-in-use':
           throw Exception('Este correo electrónico ya está registrado');
@@ -90,7 +95,7 @@ class AuthFirebaseDatasource {
     }
   }
 
-  // Login con Google - con manejo de errores mejorado
+  // Login con Google
   Future<entities.User> loginWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
@@ -129,10 +134,10 @@ class AuthFirebaseDatasource {
     }
   }
 
-  // Login con Facebook - con manejo de errores mejorado
+  // Login con Facebook
   Future<entities.User> loginWithFacebook() async {
     try {
-      final LoginResult result = await FacebookAuth.instance.login(
+      final LoginResult result = await _facebookAuth.login(
         permissions: ['public_profile', 'email'],
       );
 
@@ -172,11 +177,10 @@ class AuthFirebaseDatasource {
     }
   }
 
-  // El resto de métodos permanecen igual...
   Future<void> logout() async {
     await _firebaseAuth.signOut();
     await _googleSignIn.signOut();
-    await FacebookAuth.instance.logOut();
+    await _facebookAuth.logOut();
   }
 
   Future<void> deleteAccount() async {
@@ -184,7 +188,7 @@ class AuthFirebaseDatasource {
     if (user == null) throw Exception('No hay usuario autenticado');
     await user.delete();
     await _googleSignIn.signOut();
-    await FacebookAuth.instance.logOut();
+    await _facebookAuth.logOut();
   }
 
   entities.User? getCurrentUser() {

@@ -4,11 +4,13 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 class BarcodeScannerService {
   final MobileScannerController controller;
 
+  // MODIFICACIÓN: Agregamos inyección para el MobileScannerController
   BarcodeScannerService({
+    MobileScannerController? controller,
     DetectionSpeed? detectionSpeed,
     CameraFacing? facing,
     TorchState? torchState,
-  }) : controller = MobileScannerController(
+  }) : controller = controller ?? MobileScannerController(
           detectionSpeed: detectionSpeed ?? DetectionSpeed.normal,
           facing: facing ?? CameraFacing.back,
           torchEnabled: torchState == TorchState.on,
