@@ -35,6 +35,8 @@
     deleteProduct
   } from '../services/firestoreService';
   import { format } from 'date-fns';
+  import { roundToDecimals, hasExcessiveDecimals } from '../utils/helpers';
+
 
   export const ProductsPage = () => {
     const [products, setProducts] = useState([]);
@@ -59,6 +61,38 @@
         servingSize: '100g'
       }
     });
+    const [decimalError, setDecimalError] = useState('');
+
+    // Función de cambio con validación
+    const handleNutritionalChange = (e) => {
+      const { name, value } = e.target;
+      const field = name.split('.')[1];
+      const numericValue = parseFloat(value) || 0;
+      
+      // Validar número de decimales
+      if (hasExcessiveDecimals(value, 2)) {
+        setDecimalError('Máximo 2 decimales permitidos');
+        // Opcional: redondear automáticamente
+        const rounded = roundToDecimals(numericValue, 2);
+        setFormData({
+          ...formData,
+          nutritionalInfo: {
+            ...formData.nutritionalInfo,
+            [field]: rounded
+          }
+        });
+        return;
+      }
+      setDecimalError('');
+      setFormData({
+        ...formData,
+        nutritionalInfo: {
+          ...formData.nutritionalInfo,
+          [field]: numericValue
+        }
+      });
+    };
+
     const [error, setError] = useState('');
     const [isEditing, setIsEditing] = useState(false);
 
@@ -348,7 +382,10 @@
                     name="nutritionalInfo.calories"
                     type="number"
                     value={formData.nutritionalInfo.calories}
-                    onChange={handleChange}
+                    onChange={handleNutritionalChange}
+                    error={!!decimalError}
+                    helperText={decimalError || 'Máximo 2 decimales'}
+                    inputProps={{ step: '0.01', min: 0 }}
                     required
                   />
                 </Grid>
@@ -359,7 +396,10 @@
                     name="nutritionalInfo.protein"
                     type="number"
                     value={formData.nutritionalInfo.protein}
-                    onChange={handleChange}
+                    onChange={handleNutritionalChange}
+                    error={!!decimalError}
+                    helperText={decimalError || 'Máximo 2 decimales'}
+                    inputProps={{ step: '0.01', min: 0 }}
                     required
                   />
                 </Grid>
@@ -370,7 +410,10 @@
                     name="nutritionalInfo.carbohydrates"
                     type="number"
                     value={formData.nutritionalInfo.carbohydrates}
-                    onChange={handleChange}
+                    onChange={handleNutritionalChange}
+                    error={!!decimalError}
+                    helperText={decimalError || 'Máximo 2 decimales'}
+                    inputProps={{ step: '0.01', min: 0 }}
                     required
                   />
                 </Grid>
@@ -381,7 +424,10 @@
                     name="nutritionalInfo.fat"
                     type="number"
                     value={formData.nutritionalInfo.fat}
-                    onChange={handleChange}
+                    onChange={handleNutritionalChange}
+                    error={!!decimalError}
+                    helperText={decimalError || 'Máximo 2 decimales'}
+                    inputProps={{ step: '0.01', min: 0 }}
                     required
                   />
                 </Grid>
@@ -392,7 +438,10 @@
                     name="nutritionalInfo.fiber"
                     type="number"
                     value={formData.nutritionalInfo.fiber}
-                    onChange={handleChange}
+                    onChange={handleNutritionalChange}
+                    error={!!decimalError}
+                    helperText={decimalError || 'Máximo 2 decimales'}
+                    inputProps={{ step: '0.01', min: 0 }}
                   />
                 </Grid>
                 <Grid item xs={12} sm={4}>
@@ -402,7 +451,10 @@
                     name="nutritionalInfo.sugar"
                     type="number"
                     value={formData.nutritionalInfo.sugar}
-                    onChange={handleChange}
+                    onChange={handleNutritionalChange}
+                    error={!!decimalError}
+                    helperText={decimalError || 'Máximo 2 decimales'}
+                    inputProps={{ step: '0.01', min: 0 }}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -412,7 +464,10 @@
                     name="nutritionalInfo.sodium"
                     type="number"
                     value={formData.nutritionalInfo.sodium}
-                    onChange={handleChange}
+                    onChange={handleNutritionalChange}
+                    error={!!decimalError}
+                    helperText={decimalError || 'Máximo 2 decimales'}
+                    inputProps={{ step: '0.01', min: 0 }}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>

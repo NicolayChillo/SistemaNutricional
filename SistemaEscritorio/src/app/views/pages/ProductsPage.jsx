@@ -29,6 +29,7 @@ import {
   Visibility as VisibilityIcon
 } from '@mui/icons-material';
 import { productsController } from '../../controllers/ProductsController';
+import { roundToDecimals, hasExcessiveDecimals } from '../../utils/helpers';
 
 export const ProductsPage = () => {
   const [products, setProducts] = useState([]);
@@ -53,6 +54,7 @@ export const ProductsPage = () => {
       servingSize: '100g'
     }
   });
+  const [decimalError, setDecimalError] = useState('');
   const [error, setError] = useState('');
   const [isEditing, setIsEditing] = useState(false);
 
@@ -69,6 +71,34 @@ export const ProductsPage = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // ✅ Validación de decimales para campos nutricionales
+  const handleNutritionalChange = (e) => {
+    const { name, value } = e.target;
+    const field = name.split('.')[1];
+    const numericValue = parseFloat(value) || 0;
+    
+    if (hasExcessiveDecimals(value, 2)) {
+      setDecimalError('Máximo 2 decimales permitidos');
+      const rounded = roundToDecimals(numericValue, 2);
+      setFormData({
+        ...formData,
+        nutritionalInfo: {
+          ...formData.nutritionalInfo,
+          [field]: rounded
+        }
+      });
+      return;
+    }
+    setDecimalError('');
+    setFormData({
+      ...formData,
+      nutritionalInfo: {
+        ...formData.nutritionalInfo,
+        [field]: numericValue
+      }
+    });
   };
 
   const handleOpenDialog = (product = null) => {
@@ -119,6 +149,7 @@ export const ProductsPage = () => {
     setViewDialogOpen(true);
   };
 
+  // ✅ Para campos no numéricos (texto, etc.)
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name.startsWith('nutritionalInfo.')) {
@@ -139,12 +170,27 @@ export const ProductsPage = () => {
     e.preventDefault();
     setError('');
 
+    // ✅ Redondear TODOS los valores numéricos antes de guardar
+    const cleanedData = {
+      ...formData,
+      nutritionalInfo: {
+        ...formData.nutritionalInfo,
+        calories: roundToDecimals(formData.nutritionalInfo.calories, 2),
+        protein: roundToDecimals(formData.nutritionalInfo.protein, 2),
+        carbohydrates: roundToDecimals(formData.nutritionalInfo.carbohydrates, 2),
+        fat: roundToDecimals(formData.nutritionalInfo.fat, 2),
+        fiber: roundToDecimals(formData.nutritionalInfo.fiber, 2),
+        sugar: roundToDecimals(formData.nutritionalInfo.sugar, 2),
+        sodium: roundToDecimals(formData.nutritionalInfo.sodium, 2),
+      }
+    };
+
     try {
       if (isEditing) {
-        await productsController.updateProduct(selectedProduct.id, formData);
+        await productsController.updateProduct(selectedProduct.id, cleanedData); // ✅ cleanedData
       } else {
         await productsController.createProduct({
-          ...formData,
+          ...cleanedData, // ✅ cleanedData
           userId: 'admin'
         });
       }
@@ -316,13 +362,14 @@ export const ProductsPage = () => {
                   onChange={handleChange}
                 />
               </Grid>
-              
+
               <Grid item xs={12}>
                 <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
                   Información Nutricional
                 </Typography>
               </Grid>
-              
+
+              {/* ✅ Campos numéricos con validación de decimales */}
               <Grid item xs={12} sm={4}>
                 <TextField
                   fullWidth
@@ -330,7 +377,10 @@ export const ProductsPage = () => {
                   name="nutritionalInfo.calories"
                   type="number"
                   value={formData.nutritionalInfo.calories}
-                  onChange={handleChange}
+                  onChange={handleNutritionalChange} // ✅ Validación
+                  error={!!decimalError}
+                  helperText={decimalError || 'Máximo 2 decimales'}
+                  inputProps={{ step: '0.01', min: 0 }}
                   required
                 />
               </Grid>
@@ -341,7 +391,10 @@ export const ProductsPage = () => {
                   name="nutritionalInfo.protein"
                   type="number"
                   value={formData.nutritionalInfo.protein}
-                  onChange={handleChange}
+                  onChange={handleNutritionalChange}
+                  error={!!decimalError}
+                  helperText={decimalError || 'Máximo 2 decimales'}
+                  inputProps={{ step: '0.01', min: 0 }}
                 />
               </Grid>
               <Grid item xs={12} sm={4}>
@@ -351,7 +404,10 @@ export const ProductsPage = () => {
                   name="nutritionalInfo.carbohydrates"
                   type="number"
                   value={formData.nutritionalInfo.carbohydrates}
-                  onChange={handleChange}
+                  onChange={handleNutritionalChange}
+                  error={!!decimalError}
+                  helperText={decimalError || 'Máximo 2 decimales'}
+                  inputProps={{ step: '0.01', min: 0 }}
                 />
               </Grid>
               <Grid item xs={12} sm={4}>
@@ -361,7 +417,10 @@ export const ProductsPage = () => {
                   name="nutritionalInfo.fat"
                   type="number"
                   value={formData.nutritionalInfo.fat}
-                  onChange={handleChange}
+                  onChange={handleNutritionalChange}
+                  error={!!decimalError}
+                  helperText={decimalError || 'Máximo 2 decimales'}
+                  inputProps={{ step: '0.01', min: 0 }}
                 />
               </Grid>
               <Grid item xs={12} sm={4}>
@@ -371,7 +430,10 @@ export const ProductsPage = () => {
                   name="nutritionalInfo.fiber"
                   type="number"
                   value={formData.nutritionalInfo.fiber}
-                  onChange={handleChange}
+                  onChange={handleNutritionalChange}
+                  error={!!decimalError}
+                  helperText={decimalError || 'Máximo 2 decimales'}
+                  inputProps={{ step: '0.01', min: 0 }}
                 />
               </Grid>
               <Grid item xs={12} sm={4}>
@@ -381,7 +443,10 @@ export const ProductsPage = () => {
                   name="nutritionalInfo.sugar"
                   type="number"
                   value={formData.nutritionalInfo.sugar}
-                  onChange={handleChange}
+                  onChange={handleNutritionalChange}
+                  error={!!decimalError}
+                  helperText={decimalError || 'Máximo 2 decimales'}
+                  inputProps={{ step: '0.01', min: 0 }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -391,7 +456,10 @@ export const ProductsPage = () => {
                   name="nutritionalInfo.sodium"
                   type="number"
                   value={formData.nutritionalInfo.sodium}
-                  onChange={handleChange}
+                  onChange={handleNutritionalChange}
+                  error={!!decimalError}
+                  helperText={decimalError || 'Máximo 2 decimales'}
+                  inputProps={{ step: '0.01', min: 0 }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -436,7 +504,7 @@ export const ProductsPage = () => {
               <Typography variant="body2" gutterBottom>
                 <strong>Código:</strong> {selectedProduct.barcode}
               </Typography>
-              
+
               <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>Información Nutricional</Typography>
               <Typography variant="body2">
                 <strong>Porción:</strong> {selectedProduct.nutritionalInfo?.servingSize}
