@@ -4,6 +4,13 @@ import 'package:Nutricional/domain/entities/recipe.dart';
 void main() {
 
   group('Recipe Entity Tests', () {
+    // ======================================
+    // TIPO DE PRUEBA:
+    // Prueba Unitaria (Unit Test)
+    // OBJETIVO:
+    // Verificar la creación de Recipe y
+    // los valores por defecto.
+    // ======================================
 
     test('Debe crear una receta correctamente', () {
 

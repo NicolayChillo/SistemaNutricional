@@ -5,6 +5,15 @@ void main() {
 
   group('CalendarEntry Entity Tests', () {
 
+    // ==============================
+    // TIPO DE PRUEBA:
+    // Prueba Unitaria (Unit Test)
+    // OBJETIVO:
+    // Verificar que la entidad CalendarEntry
+    // se construya correctamente y que los
+    // valores por defecto funcionen.
+    // ==============================
+
     test('Debe crear una entrada del calendario', () {
 
       final entry = CalendarEntry(

@@ -4,6 +4,13 @@ import 'package:Nutricional/domain/entities/nutritional_info.dart';
 
 void main() {
   group('Product Entity Tests', () {
+    // ======================================
+    // TIPO DE PRUEBA:
+    // Prueba Unitaria (Unit Test)
+    // OBJETIVO:
+    // Verificar la creación correcta
+    // de la entidad Product.
+    // ======================================
 
     test('Debe crear un producto correctamente', () {
 

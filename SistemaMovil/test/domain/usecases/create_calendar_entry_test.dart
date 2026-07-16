@@ -6,6 +6,8 @@ import 'package:Nutricional/domain/usecases/create_calendar_entry.dart';
 
 import 'mocks/mock_calendar_repository.dart';
 
+class FakeCalendarEntry extends Fake implements CalendarEntry{}
+
 void main() {
   late MockCalendarRepository repository;
   late CreateCalendarEntryUseCase useCase;
@@ -13,6 +15,9 @@ void main() {
   setUp(() {
     repository = MockCalendarRepository();
     useCase = CreateCalendarEntryUseCase(repository);
+    registerFallbackValue(
+      FakeCalendarEntry(),
+    );
   });
 
   group('CreateCalendarEntryUseCase', () {
