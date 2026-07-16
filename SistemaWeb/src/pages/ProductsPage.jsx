@@ -35,8 +35,17 @@
     deleteProduct
   } from '../services/firestoreService';
   import { format } from 'date-fns';
-  import { roundToDecimals, hasExcessiveDecimals } from '../utils/helpers';
+  import { 
+    roundToDecimals, 
+    hasExcessiveDecimals, 
+    MAX_DECIMALS,
+    cleanNumericFields
+  } from '../utils/helpers';
 
+  const NUMERIC_FIELDS = [
+    'calories', 'protein', 'carbohydrates', 
+    'fat', 'fiber', 'sugar', 'sodium'
+  ];
 
   export const ProductsPage = () => {
     const [products, setProducts] = useState([]);
