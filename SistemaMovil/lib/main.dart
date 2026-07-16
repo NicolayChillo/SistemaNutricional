@@ -33,25 +33,27 @@ import 'domain/usecases/create_product.dart';
 import 'domain/usecases/get_products.dart';
 import 'domain/usecases/update_product.dart';
 import 'domain/usecases/delete_product.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:http/http.dart' as http;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
   // Inicializar datos de localización
   await initializeDateFormatting('es', null);
-  
+
   // Inicializar servicio de conectividad
   await ConnectivityService.instance.initialize();
-  
+
   // Configurar manejador de mensajes en segundo plano (app cerrada)
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
-  
+
   // Inicializar Firebase Messaging
   await FirebaseMessagingService.instance.initialize();
-  
+
   runApp(const MainApp());
 }
 
@@ -67,8 +69,11 @@ class MainApp extends StatelessWidget {
     final productRepository = ProductRepositoryImpl(
       productLocalDatasource,
       productFirebaseDatasource,
+      Connectivity(),
     );
-    final openFoodFactsService = OpenFoodFactsService();
+    final openFoodFactsService = OpenFoodFactsService(
+      client: http.Client(),
+    );
 
     return MultiProvider(
       providers: [
@@ -96,7 +101,7 @@ class MainApp extends StatelessWidget {
               ),
             );
           }
-          
+
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Nutricional',
