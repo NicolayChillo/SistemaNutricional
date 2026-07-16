@@ -8,11 +8,18 @@ import '../datasources/product_firebase_datasource.dart';
 class ProductRepositoryImpl implements ProductRepository {
   final ProductLocalDatasource _localDatasource;
   final ProductFirebaseDatasource _firebaseDatasource;
+  // MODIFICACIÓN: Inyectamos Connectivity para poder simular el internet en las pruebas
+  final Connectivity _connectivity;
 
-  ProductRepositoryImpl(this._localDatasource, this._firebaseDatasource);
+  ProductRepositoryImpl(
+    this._localDatasource, 
+    this._firebaseDatasource,
+    this._connectivity, // Lo pedimos en el constructor
+  );
 
   Future<bool> _isOnline() async {
-    final connectivityResult = await Connectivity().checkConnectivity();
+    // MODIFICACIÓN: Usamos la variable inyectada en lugar de llamar a Connectivity() directo
+    final connectivityResult = await _connectivity.checkConnectivity();
     return connectivityResult != ConnectivityResult.none;
   }
 

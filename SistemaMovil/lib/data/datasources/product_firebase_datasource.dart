@@ -3,8 +3,13 @@ import '../../domain/entities/product.dart';
 import '../../domain/entities/nutritional_info.dart';
 
 class ProductFirebaseDatasource {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore _firestore;
   final String _collection = 'products';
+
+  // MODIFICACIÓN: Pedimos FirebaseFirestore en el constructor.
+  // Si no nos pasan nada (como en la app real), usa la instancia por defecto.
+  ProductFirebaseDatasource({FirebaseFirestore? firestore}) 
+      : _firestore = firestore ?? FirebaseFirestore.instance;
 
   /// Crear producto
   Future<Product> createProduct(Product product) async {

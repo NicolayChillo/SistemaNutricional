@@ -6,6 +6,11 @@ import '../../domain/entities/nutritional_info.dart';
 
 /// Servicio para consultar la API de Open Food Facts
 class OpenFoodFactsService {
+  // MODIFICACIÓN: Inyección de dependencias para poder hacer las pruebas (Mocking)
+  final http.Client client;
+
+  OpenFoodFactsService({required this.client});
+
   static const String _baseUrl = 'https://world.openfoodfacts.org/api/v2/product';
 
   /// Busca un producto por código de barras
@@ -13,7 +18,9 @@ class OpenFoodFactsService {
   Future<Product?> getProductByBarcode(String barcode, String userId) async {
     try {
       final url = Uri.parse('$_baseUrl/$barcode.json');
-      final response = await http.get(url);
+      
+      // MODIFICACIÓN: Usamos el cliente inyectado en lugar de http.get directo
+      final response = await client.get(url);
 
       if (response.statusCode != 200) {
         dev.log('Error API: ${response.statusCode}', name: 'OpenFoodFactsService');
