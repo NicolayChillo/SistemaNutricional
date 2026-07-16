@@ -70,10 +70,10 @@
       const numericValue = parseFloat(value) || 0;
       
       // Validar número de decimales
-      if (hasExcessiveDecimals(value, 2)) {
-        setDecimalError('Máximo 2 decimales permitidos');
+      if (hasExcessiveDecimals(value, 4)) {
+        setDecimalError('Máximo 4 decimales permitidos');
         // Opcional: redondear automáticamente
-        const rounded = roundToDecimals(numericValue, 2);
+        const rounded = roundToDecimals(numericValue, 4);
         setFormData({
           ...formData,
           nutritionalInfo: {
@@ -384,8 +384,8 @@
                     value={formData.nutritionalInfo.calories}
                     onChange={handleNutritionalChange}
                     error={!!decimalError}
-                    helperText={decimalError || 'Máximo 2 decimales'}
-                    inputProps={{ step: '0.01', min: 0 }}
+                    helperText={decimalError || 'Máximo 4 decimales'}
+                    inputProps={{ step: '0.0001', min: 0 }}
                     required
                   />
                 </Grid>
@@ -398,8 +398,8 @@
                     value={formData.nutritionalInfo.protein}
                     onChange={handleNutritionalChange}
                     error={!!decimalError}
-                    helperText={decimalError || 'Máximo 2 decimales'}
-                    inputProps={{ step: '0.01', min: 0 }}
+                    helperText={decimalError || 'Máximo 4 decimales'}
+                    inputProps={{ step: '0.0001', min: 0 }}
                     required
                   />
                 </Grid>
@@ -412,8 +412,8 @@
                     value={formData.nutritionalInfo.carbohydrates}
                     onChange={handleNutritionalChange}
                     error={!!decimalError}
-                    helperText={decimalError || 'Máximo 2 decimales'}
-                    inputProps={{ step: '0.01', min: 0 }}
+                    helperText={decimalError || 'Máximo 4 decimales'}
+                    inputProps={{ step: '0.0001', min: 0 }}
                     required
                   />
                 </Grid>
@@ -426,8 +426,8 @@
                     value={formData.nutritionalInfo.fat}
                     onChange={handleNutritionalChange}
                     error={!!decimalError}
-                    helperText={decimalError || 'Máximo 2 decimales'}
-                    inputProps={{ step: '0.01', min: 0 }}
+                    helperText={decimalError || 'Máximo 4 decimales'}
+                    inputProps={{ step: '0.0001', min: 0 }}
                     required
                   />
                 </Grid>
@@ -440,8 +440,8 @@
                     value={formData.nutritionalInfo.fiber}
                     onChange={handleNutritionalChange}
                     error={!!decimalError}
-                    helperText={decimalError || 'Máximo 2 decimales'}
-                    inputProps={{ step: '0.01', min: 0 }}
+                    helperText={decimalError || 'Máximo 4 decimales'}
+                    inputProps={{ step: '0.0001', min: 0 }}
                   />
                 </Grid>
                 <Grid item xs={12} sm={4}>
@@ -453,8 +453,8 @@
                     value={formData.nutritionalInfo.sugar}
                     onChange={handleNutritionalChange}
                     error={!!decimalError}
-                    helperText={decimalError || 'Máximo 2 decimales'}
-                    inputProps={{ step: '0.01', min: 0 }}
+                    helperText={decimalError || 'Máximo 4 decimales'}
+                    inputProps={{ step: '0.0001', min: 0 }}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -466,8 +466,8 @@
                     value={formData.nutritionalInfo.sodium}
                     onChange={handleNutritionalChange}
                     error={!!decimalError}
-                    helperText={decimalError || 'Máximo 2 decimales'}
-                    inputProps={{ step: '0.01', min: 0 }}
+                    helperText={decimalError || 'Máximo 4 decimales'}
+                    inputProps={{ step: '0.0001', min: 0 }}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
