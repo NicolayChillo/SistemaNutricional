@@ -5,6 +5,14 @@ void main() {
 
   group('NutritionalInfo Entity Tests', () {
 
+    // ==========================================
+    // TIPO DE PRUEBA:
+    // Prueba Unitaria (Unit Test)
+    // OBJETIVO:
+    // Validar la creación de la entidad,
+    // serialización JSON y valores por defecto.
+    // ==========================================
+
     test('Debe crear correctamente la información nutricional', () {
 
       final nutrition = NutritionalInfo(
@@ -19,6 +27,12 @@ void main() {
       expect(nutrition.servingSize, '100g');
     });
 
+    // ==========================================
+    // TIPO:
+    // Prueba Unitaria de Serialización
+    // OBJETIVO:
+    // Verificar conversión a JSON.
+    // ==========================================
     test('Debe convertir a JSON', () {
 
       final nutrition = NutritionalInfo(
@@ -34,6 +48,12 @@ void main() {
       expect(json['protein'], 10);
     });
 
+    // ==========================================
+    // TIPO:
+    // Prueba Unitaria de Deserialización
+    // OBJETIVO:
+    // Verificar creación desde JSON.
+    // ==========================================
     test('Debe crear desde JSON', () {
 
       final json = {
@@ -50,6 +70,12 @@ void main() {
       expect(nutrition.fat, 10);
     });
 
+    // ==========================================
+    // TIPO:
+    // Prueba de Valores por Defecto
+    // OBJETIVO:
+    // Verificar manejo de datos faltantes.
+    // ==========================================
     test('Debe usar valores por defecto cuando faltan datos', () {
 
       final nutrition =

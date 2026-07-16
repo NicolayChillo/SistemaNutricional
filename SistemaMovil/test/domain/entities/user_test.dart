@@ -4,6 +4,13 @@ import 'package:Nutricional/domain/entities/user.dart';
 void main() {
 
   group('User Entity Tests', () {
+    // ======================================
+    // TIPO DE PRUEBA:
+    // Prueba Unitaria (Unit Test)
+    // OBJETIVO:
+    // Verificar que la entidad User
+    // almacene correctamente sus datos.
+    // ======================================
 
     test('Debe crear un usuario correctamente', () {
 
